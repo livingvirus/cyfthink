@@ -91,9 +91,7 @@ class Verify
     {
         $key = $this->authcode($this->seKey) . $id;
         // 验证码不能为空
-        //$secode = session($key);
-        session_start();
-        $secode = $_SESSION[$key];
+        $secode = session($key.$id);
         if (empty($code) || empty($secode)) {
             return false;
         }
@@ -102,8 +100,7 @@ class Verify
             session($key, null);
             return false;
         }
-
-        if ($this->authcode($code) == $secode['verify_code']) {
+        if ($this->authcode(strtolower($code)) == $secode['verify_code']) {
             $this->reset && session($key, null);
             return true;
         }
@@ -179,17 +176,11 @@ class Verify
 
         // 保存验证码
         $key                   = $this->authcode($this->seKey);
-        $code                  = $this->authcode(implode('', $code));
+        $code                  = $this->authcode(strtolower(implode('', $code)));
         $secode                = [];
         $secode['verify_code'] = $code; // 把校验码保存到session
-        $secode['verify_time'] = NOW_TIME; // 验证码创建时间
-        //        session($key.$id, $secode);
-        //         echo  '<pre>';
-        //         print_r($key.$id);
-        //         exit;
-        session_start();
-        $_SESSION[$key . $id] = $secode;
-
+        $secode['verify_time'] = NOW_TIME;  // 验证码创建时间
+        session($key.$id, $secode);
         header('Cache-Control: private, max-age=0, no-store, no-cache, must-revalidate');
         header('Cache-Control: post-check=0, pre-check=0', false);
         header('Pragma: no-cache');
@@ -198,6 +189,7 @@ class Verify
         // 输出图像
         imagepng($this->_image);
         imagedestroy($this->_image);
+		exit;
     }
 
     /**
