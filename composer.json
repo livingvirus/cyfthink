@@ -1,0 +1,26 @@
+{
+    "name": "livingvirus/cyfthink",
+    "description": "cyfthink",
+    "type": "project",
+    "keywords": ["cyfthink", "thinkphp"],
+    "homepage": "",
+    "authors": [
+        {
+            "name": "livingvirus",
+            "email": "livingviruskang@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "files": [
+            "src/base.php",
+            "src/helper.php"
+        ],
+        "psr-4": {
+            "think\\": "src/think/",
+            "traits\\": "src/traits/"
+        }
+    }
+}
